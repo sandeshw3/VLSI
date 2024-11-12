@@ -1,0 +1,93 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    08:52:38 11/11/2024 
+-- Design Name:    FIFO Testbench
+-- Module Name:    tb_FIFO_V1 - Testbench 
+-- Description:    Testbench for verifying the FIFO module behavior
+--
+----------------------------------------------------------------------------------
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY tb_FIFO_V1 IS
+END tb_FIFO_V1;
+
+ARCHITECTURE behavior OF tb_FIFO_V1 IS 
+
+    -- Component Declaration for the FIFO module
+    COMPONENT FIFO_V1
+    PORT(
+        clk     : IN  std_logic;
+        rst     : IN  std_logic;
+        EN      : IN  std_logic;
+        w       : IN  std_logic;
+        datain  : IN  std_logic_vector(7 downto 0);
+        dataout : OUT std_logic_vector(7 downto 0);
+        red     : OUT std_logic
+    );
+    END COMPONENT;
+
+    -- Signals to connect to the FIFO module
+    SIGNAL clk      : std_logic := '0';
+    SIGNAL rst      : std_logic;
+    SIGNAL EN       : std_logic;
+    SIGNAL w        : std_logic;
+    SIGNAL datain   : std_logic_vector(7 downto 0);
+    SIGNAL dataout  : std_logic_vector(7 downto 0);
+    SIGNAL red      : std_logic;
+
+    -- Clock generation process
+    CONSTANT clk_period : time := 20 ns;
+    
+BEGIN
+
+    -- Instantiate the FIFO Unit Under Test (UUT)
+    uut: FIFO_V1 PORT MAP (
+        clk     => clk,
+        rst     => rst,
+        EN      => EN,
+        w       => w,
+        datain  => datain,
+        dataout => dataout,
+        red     => red
+    );
+
+    -- Clock Generation
+    clk_process : PROCESS
+    BEGIN
+        clk <= '0';
+        wait for clk_period / 2;
+        clk <= '1';
+        wait for clk_period / 2;
+    END PROCESS;
+
+    -- Stimulus Process
+    tb : PROCESS
+    BEGIN
+        wait for 100 ns; -- Wait for global reset
+        
+        -- Reset the FIFO
+        rst <= '1';
+        wait for 10 ns;
+        rst <= '0';
+
+        -- Enable FIFO, Write Data
+        EN <= '1';
+        w <= '1';
+        datain <= "00010100";
+        wait for 20 ns;
+
+        -- Disable Write, Start Read
+        w <= '0';
+        wait for 20 ns;
+
+        -- Additional writes and reads can be added here for thorough testing
+
+        wait; -- wait forever to end simulation
+    END PROCESS tb;
+
+END behavior;

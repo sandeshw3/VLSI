@@ -1,0 +1,78 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    08:52:38 11/11/2024 
+-- Design Name:    FIFO Memory
+-- Module Name:    FIFO_V1 - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description:    16x8 FIFO buffer with write and read pointers, 
+--                 supporting write and read enable signals.
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;  -- Use NUMERIC_STD for arithmetic operations
+
+entity FIFO_V1 is
+    Port (
+        clk     : in  STD_LOGIC;
+        rst     : in  STD_LOGIC;
+        EN      : in  STD_LOGIC;                     -- Enable signal
+        w       : in  STD_LOGIC;                     -- Write enable signal
+        datain  : in  STD_LOGIC_VECTOR(7 downto 0);  -- Data input
+        dataout : out STD_LOGIC_VECTOR(7 downto 0);  -- Data output
+        red     : out STD_LOGIC                      -- Read empty flag
+    );
+end FIFO_V1;
+
+architecture Behavioral of FIFO_V1 is
+
+    -- Signals for write and read pointers
+    signal WPTR, RPTR : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
+
+    -- FIFO memory array
+    type fifo is array (15 downto 0) of std_logic_vector(7 downto 0);
+    signal MEM : fifo := (others => (others => '0'));
+
+begin 
+    PROCESS(clk, rst)
+    BEGIN  
+        IF rst = '1' THEN
+            -- Reset pointers and signals
+            WPTR <= "0000";
+            RPTR <= "0000";
+            red <= '0';
+            dataout <= (others => '0');  -- Clear data output
+
+        ELSIF (rising_edge(clk)) THEN  -- Rising edge detection for clock
+            IF (EN = '1') THEN
+                IF (w = '1') THEN  -- Write operation
+                    IF WPTR < "1111" THEN
+                        MEM(to_integer(unsigned(WPTR))) <= datain; -- Write data to FIFO
+                        WPTR <= std_logic_vector(unsigned(WPTR) + 1); -- Increment write pointer
+                    END IF;
+                ELSE  -- Read operation
+                    IF RPTR < WPTR THEN
+                        red <= '0';  -- FIFO is not empty
+                        dataout <= MEM(to_integer(unsigned(RPTR))); -- Read data from FIFO
+                        RPTR <= std_logic_vector(unsigned(RPTR) + 1); -- Increment read pointer
+                    ELSE
+                        red <= '1';  -- FIFO is empty
+                        dataout <= (others => '0'); -- Clear data output when empty
+                    END IF;
+                END IF;
+            END IF;
+        END IF;
+    END PROCESS;
+
+end Behavioral;

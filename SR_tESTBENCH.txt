@@ -1,0 +1,91 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY testbench IS
+END testbench;
+
+ARCHITECTURE behavior OF testbench IS 
+
+    -- Component Declaration
+    COMPONENT SR_vhdl1  -- Replace <component name> with the actual component name
+    PORT(
+        clk   : IN  std_logic;
+        m     : IN  std_logic_vector(1 downto 0);
+        load  : IN  std_logic;
+        clear : IN  std_logic;
+        d     : IN  std_logic_vector(3 downto 0);       
+        q     : OUT std_logic_vector(3 downto 0)
+    );
+    END COMPONENT;
+
+    -- Testbench Signals
+    SIGNAL clk   : std_logic := '0';
+    SIGNAL m     : std_logic_vector(1 downto 0);
+    SIGNAL load  : std_logic;
+    SIGNAL clear : std_logic;
+    SIGNAL d     : std_logic_vector(3 downto 0);
+    SIGNAL q     : std_logic_vector(3 downto 0);
+
+BEGIN
+
+    -- Component Instantiation
+    uut: SR_vhdl1 PORT MAP(
+        clk   => clk,
+        m     => m,
+        load  => load,
+        clear => clear,
+        d     => d,
+        q     => q
+    );
+
+    -- Clock generation process
+    clk_process : PROCESS
+    BEGIN
+        clk <= '0';
+        wait for 50 ns;
+        clk <= '1';
+        wait for 50 ns;
+    END PROCESS clk_process;
+
+    -- Testbench Stimulus Process
+    tb : PROCESS
+    BEGIN
+        wait for 100 ns;  -- Initial wait for reset completion
+
+        -- Test sequence
+        -- Clear and reset signals
+        clear <= '1';
+        wait for 100 ns;
+        clear <= '0';
+
+        -- Test for PIPO mode (m = "00")
+        m <= "00";
+        d <= "1011";
+        wait for 100 ns;
+
+        -- Test for SIPO mode (m = "01")
+        m <= "01";
+        load <= '1';
+        wait for 100 ns;
+        load <= '0';
+        wait for 100 ns;
+
+        -- Test for SISO mode (m = "10")
+        m <= "10";
+        load <= '1';
+        wait for 100 ns;
+        load <= '0';
+        wait for 100 ns;
+
+        -- Test for unsupported mode (m = "11")
+        m <= "11";
+        load <= '1';
+        wait for 100 ns;
+        load <= '0';
+        wait for 100 ns;
+
+        wait;  -- Wait forever to end the simulation
+    END PROCESS tb;
+
+END behavior;

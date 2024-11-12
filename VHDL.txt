@@ -1,0 +1,55 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    09:04:10 11/11/2024 
+-- Design Name:    ALU555
+-- Module Name:    ALU555 - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description:     A basic ALU performing addition, subtraction, and logical operations.
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity ALU555 is
+    Port (
+        a   : in  STD_LOGIC_VECTOR(3 downto 0);  -- 4-bit input a
+        b   : in  STD_LOGIC_VECTOR(3 downto 0);  -- 4-bit input b
+        Sel : in  STD_LOGIC_VECTOR(3 downto 0);  -- 4-bit selection input
+        Y   : out STD_LOGIC_VECTOR(3 downto 0)   -- 4-bit output
+    );
+end ALU555;
+
+architecture Behavioral of ALU555 is
+begin
+    process(a, b, Sel)  
+    begin   
+        case Sel is  
+            when "0000" => Y <= a + b;          -- Addition
+            when "0001" => Y <= a - b;          -- Subtraction
+            when "0010" => Y <= a and b;        -- AND operation
+            when "0011" => Y <= not (a and b);  -- NAND operation
+            when "0100" => Y <= a xor b;        -- XOR operation
+            when "0101" => Y <= a xnor b;       -- XNOR operation
+            when "0110" => Y <= a or b;         -- OR operation
+            when "0111" => Y <= a;              -- Pass a
+            when "1000" => Y <= b;              -- Pass b
+            when others => Y <= "0000";         -- Default to 0
+        end case;  
+    end process;  
+end Behavioral;
+
+
+

@@ -1,0 +1,56 @@
+LIBRARY ieee; 
+USE ieee.std_logic_1164.ALL; 
+USE ieee.std_logic_unsigned.all; 
+USE ieee.numeric_std.ALL; 
+ENTITY bhamare1_vhd IS 
+END bhamare1_vhd; 
+ARCHITECTURE behavior OF bhamare1_vhd IS  -- Component Declara on for the Unit Under Test (UUT) 
+COMPONENT bham1 
+PORT( 
+a : IN std_logic_vector(3 downto 0); 
+b : IN std_logic_vector(3 downto 0); 
+Sel : IN std_logic_vector(3 downto 0);           
+Y : OUT std_logic_vector(3 downto 0) 
+); 
+END COMPONENT; --Inputs 
+SIGNAL a :  std_logic_vector(3 downto 0) := (others=>'0'); 
+SIGNAL b :  std_logic_vector(3 downto 0) := (others=>'0'); 
+SIGNAL Sel :  std_logic_vector(3 downto 0) := (others=>'0'); --Outputs 
+SIGNAL Y :  std_logic_vector(3 downto 0); 
+BEGIN -- Instan ate the Unit Under Test (UUT) 
+uut: bham1 PORT MAP( 
+a => a, 
+  b => b, 
+  Sel => Sel, 
+  Y => Y 
+ ); 
+ 
+ tb : PROCESS 
+ BEGIN 
+ 
+  -- Wait 100 ns for global reset to finish 
+  wait for 100 ns; 
+ 
+  a<="1011";  
+  b<="1001";  
+  Sel<="0000";--Result of Addi on  
+  wait for 100 ns;  
+  Sel<="0001";--Result of Subtrac on  
+  wait for 100 ns;  
+  Sel<="0010";--Result of and  
+  wait for 100 ns;  
+  Sel<="0011";--Result of xor  
+  wait for 100 ns;  
+  Sel<="0100";--Result of xnor  
+  wait for 100 ns;  
+  Sel<="0101";--Result of or  
+  wait for 100 ns;  
+  Sel<="0111";--Value of a  
+  wait for 100 ns;  
+  Sel<="1000";--Value of b  
+  wait for 100 ns; 
+  wait for 100 ns;  
+wait; -- will wait forever 
+END PROCESS; 
+ 
+END;

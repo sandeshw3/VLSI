@@ -1,0 +1,41 @@
+LIBRARY ieee; 
+USE ieee.std_logic_1164.ALL; 
+USE ieee.std_logic_unsigned.all; 
+USE ieee.numeric_std.ALL; 
+ENTITY lcd123_vhd IS 
+END lcd123_vhd; 
+ARCHITECTURE behavior OF lcd123_vhd IS  -- Component Declara on for the Unit Under Test (UUT) 
+COMPONENT lcd12 
+PORT( 
+clk : IN std_logic;           
+lcd_rw : OUT std_logic; 
+lcd_e : OUT std_logic; 
+lcd_rs : OUT std_logic; 
+data : OUT std_logic_vector(7 downto 0) 
+); 
+END COMPONENT; --Inputs 
+SIGNAL clk :  std_logic := '0'; --Outputs 
+SIGNAL lcd_rw :  std_logic; 
+SIGNAL lcd_e :  std_logic; 
+SIGNAL lcd_rs :  std_logic; 
+SIGNAL data :  std_logic_vector(7 downto 0); 
+BEGIN -- Instan ate the Unit Under Test (UUT) 
+uut: lcd12 PORT MAP( 
+clk => clk, 
+lcd_rw => lcd_rw, 
+  lcd_e => lcd_e, 
+  lcd_rs => lcd_rs, 
+  data => data 
+ ); 
+ tb : PROCESS 
+ BEGIN 
+  -- Wait 100 ns for global reset to finish 
+  wait for 100 ns; 
+  clk <= '0';  
+  wait for 10 ns;  
+  clk <= '1';  
+  wait for 10 ns;  
+     -- wait for clk_period*10;  
+  wait; -- will wait forever 
+ END PROCESS; 
+END; 

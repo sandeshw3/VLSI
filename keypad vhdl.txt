@@ -1,0 +1,72 @@
+library IEEE; 
+use IEEE.STD_LOGIC_1164.ALL; 
+use IEEE.STD_LOGIC_ARITH.ALL; 
+use IEEE.STD_LOGIC_UNSIGNED.ALL; ---- Uncomment the following library declara on if instan a ng ---- any Xilinx primi ves in this code. --library UNISIM; --use UNISIM.VComponents.all; 
+entity keypad12 is 
+Port ( rows : in  STD_LOGIC_VECTOR (3 downto 0); 
+columns : in  STD_LOGIC_VECTOR (3 downto 0); 
+dout : out  STD_LOGIC_VECTOR (7 downto 0)); 
+end keypad12; 
+architecture Behavioral of keypad12 is 
+begin  
+process(rows, columns)  
+begin  
+if(rows="0001")then  
+if (columns="0001")then  
+dout<="00111111";  
+end if;  
+if (columns="0010")then  
+dout<="00000110";  
+end if;  
+if (columns="0100")then  
+dout<="01011011";  
+end if;  
+if (columns="1000")then  
+dout<="01001111";  
+end if;  
+end if;  
+if(rows="0010")then  
+if (columns="0001")then  
+dout<="01100110";  
+end if;     
+if (columns="0010")then  
+dout<="01101101";  
+end if;  
+if (columns="0100")then  
+dout<="01111101";  
+end if;  
+if (columns="1000")then  
+dout<="00000111";  
+end if;  
+end if;  
+if(rows="0100")then  
+if (columns="0001")then  
+dout<="01111111";  
+end if;  
+if (columns="0010")then  
+dout<="01100111";  
+end if;  
+if (columns="0100")then  
+dout<="01110111";  
+end if;    
+if (columns="1000")then  
+dout<="01111100";  
+end if;  
+end if;  
+if(rows="1000")then  
+if (columns="0001")then  
+dout<="00111001";  
+end if;   
+if (columns="0010")then  
+dout<="01011110";  
+end if;   
+if (columns="0100")then  
+dout<="01111001";  
+end if;    
+if (columns="1000")then  
+dout<="01110001";  
+end if;  
+end if;  
+end process;  
+end Behavioral;
+

@@ -1,0 +1,91 @@
+Prac cal 2 Part A SISO 
+Code 
+process(clk,m,load,clear)  
+variable temp,p:std_logic_vector(3 downto 0); 
+variable c:integer:=0; 
+begin 
+if clear='1'then  
+q<="0000"; 
+elsif clk'event and clk='1' then 
+c:=c+1; 
+if c=2 then  
+c:=0;  
+case m is  
+when "00" => --PIPO  
+q<=d; 
+when "01" => --SIPO  
+if(load='1') then 
+temp:=d; 
+q<="0000"; 
+else  
+q<="000"&temp(0) ; 
+temp:='0'&temp(3 downto 1);  
+end if;  
+when "10"=> -- SISO  
+if (load='1' ) 
+then temp:="0000"; 
+q<="0000";  
+ p:=d; 
+ else  
+ temp:=p(0)&temp(3 downto 1); 
+ q<="000"&temp(0) ;  
+ end if; 
+ when others=> 
+ if(load='1')then 
+ temp:="0000"; 
+ q<="0000";  
+ p :=d; 
+ else  
+ temp:=p(0)&temp(3 downto 1); 
+ end if; 
+ 
+end case; 
+ 
+end if; 
+end if; 
+end process; 
+end behavioral; 
+ 
+Test Bench Code 
+ clear<='1';  
+  wait for 100 ns;  
+  clear<='0';  
+  m<="00";  
+  d<="1011";  
+  wait for 100 ns; 
+  m<="01"; 
+  load<='1';  
+  wait for 100 ns;  
+  load<='0'; 
+  wait for 100 ns; 
+  m<="10";  
+  load<='1'; 
+      wait for 100 ns;   
+  load<='0'; 
+  wait for 100 ns; 
+  m<="11"; 
+  load<='1'; 
+  wait for 100 ns; 
+  load<='0'; 
+  wait for 100 ns; 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

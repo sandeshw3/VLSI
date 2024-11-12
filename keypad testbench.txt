@@ -1,0 +1,86 @@
+LIBRARY ieee; 
+USE ieee.std_logic_1164.ALL; 
+USE ieee.std_logic_unsigned.all; 
+USE ieee.numeric_std.ALL; 
+ENTITY keypad1234_vhd IS 
+END keypad1234_vhd; 
+ARCHITECTURE behavior OF keypad1234_vhd IS  -- Component Declara on for the Unit Under Test (UUT) 
+COMPONENT keypad12 
+PORT( 
+rows  IN std_logic_vector(3 downto 0); 
+columns  IN std_logic_vector(3 downto 0);           
+dout  OUT std_logic_vector(7 downto 0) 
+); 
+END COMPONENT; 
+ --Inputs 
+ SIGNAL rows   std_logic_vector(3 downto 0) = (others='0'); 
+ SIGNAL columns   std_logic_vector(3 downto 0) = (others='0'); 
+ --Outputs 
+ SIGNAL dout   std_logic_vector(7 downto 0); 
+BEGIN 
+ -- Instan ate the Unit Under Test (UUT) 
+ uut keypad12 PORT MAP( 
+  rows = rows, 
+  columns = columns, 
+  dout = dout 
+ ); 
+ tb  PROCESS 
+ BEGIN 
+  -- Wait 100 ns for global reset to finish 
+  wait for 100 ns; 
+  rows = 0001;  
+  columns = 0001;  
+        wait for 100 ns;  
+  rows = 0001;  
+  columns = 0010;  
+        wait for 100 ns;  
+  rows = 0001;  
+  columns = 0100;  
+        wait for 100 ns;  
+  rows = 0001;  
+  columns = 1000;  
+        wait for 100 ns;  
+  -- for second row =  
+  rows = 0010;  
+  columns = 0001;  
+        wait for 100 ns;  
+   rows = 0010;  
+  columns = 0010;  
+        wait for 100 ns;  
+  rows = 0010;  
+  columns = 0100;  
+        wait for 100 ns;  
+  rows = 0010;  
+  columns = 1000;  
+        wait for 100 ns;  
+  -- for third row =   
+  rows = 0100;  
+  columns = 0001;  
+        wait for 100 ns;  
+                      rows = 0100;  
+  columns = 0010;  
+        wait for 100 ns;  
+  rows = 0100;  
+  columns = 0100;  
+       wait for 100 ns;  
+  rows = 0100;  
+  columns = 1000;  
+        wait for 100 ns;  
+  -- for fourth row =   
+  rows = 1000;  
+  columns = 0001;  
+        wait for 100 ns;  
+  
+  rows = 1000;  
+  columns = 0010;  
+        wait for 100 ns;  
+  rows = 1000;  
+  columns = 0100;  
+        wait for 100 ns;  
+  rows = 1000;  
+  columns = 1000;  
+        wait for 100 ns;    
+--wait for clock_period10;  
+wait; -- will wait forever 
+END PROCESS; 
+END;
